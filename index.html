@@ -156,7 +156,8 @@
           <!-- Imagen cargada dinámicamente -->
           <img 
             id="customGangLogoImg" 
-            src="" 
+            src="image_b7fefa.jpg" 
+            onerror="checkGangLogoFallback(this)"
             alt="Emblema Los Desterrados" 
             class="hidden w-full h-full object-cover rounded-full"
           />
@@ -276,7 +277,8 @@
           <!-- Imagen personalizada -->
           <img 
             id="customSadieImg" 
-            src="" 
+            src="logo sadie.jpg" 
+            onerror="checkSadieFallback(this)"
             alt="Sadie - Vaquera Forajida" 
             class="hidden w-full h-full object-cover object-top rounded-full"
           />
@@ -401,7 +403,8 @@
                 </div>
                 <img 
                   id="customSadieMiniImg"
-                  src="" 
+                  src="logo sadie.jpg" 
+                  onerror="this.classList.add('hidden')"
                   alt="Sadie" 
                   class="hidden w-full h-full object-cover object-top"
                 />
@@ -1247,17 +1250,59 @@
       if (imgMini && miniWrapper) {
         imgMini.src = src;
         imgMini.classList.remove('hidden');
-        miniWrapper.classList.add('hidden');
+        if (miniWrapper) miniWrapper.classList.add('hidden');
       }
     }
 
-    // CARGAR IMÁGENES PREVIAMENTE GUARDADAS EN EL NAVEGADOR
+    // Fallbacks para variantes de nombres si el usuario cambia el nombre
+    function checkGangLogoFallback(imgElement) {
+      if (imgElement.src.endsWith('image_b7fefa.jpg')) {
+        imgElement.src = 'logo.jpg';
+      } else if (imgElement.src.endsWith('logo.jpg')) {
+        imgElement.src = 'logo.png';
+      } else {
+        imgElement.classList.add('hidden');
+        const svg = document.getElementById('fallbackLogoSvg');
+        if (svg) svg.classList.remove('hidden');
+      }
+    }
+
+    function checkSadieFallback(imgElement) {
+      if (imgElement.src.includes('logo%20sadie.jpg') || imgElement.src.includes('logo sadie.jpg')) {
+        imgElement.src = 'sadie.jpg';
+      } else if (imgElement.src.endsWith('sadie.jpg')) {
+        imgElement.src = 'sadie.png';
+      } else {
+        imgElement.classList.add('hidden');
+        const svg = document.getElementById('fallbackSadieSvg');
+        if (svg) svg.classList.remove('hidden');
+      }
+    }
+
+    // CARGAR IMÁGENES PREVIAMENTE GUARDADAS EN EL NAVEGADOR O PROBAR AUTO-LOAD LOCAL
     window.addEventListener('DOMContentLoaded', () => {
       const savedLogo = localStorage.getItem('desterrados_gang_logo');
-      if (savedLogo) applyLoadedLogo(savedLogo);
+      if (savedLogo) {
+        applyLoadedLogo(savedLogo);
+      } else {
+        // Intentar cargar automáticamente image_b7fefa.jpg de la misma carpeta
+        const imgLogo = document.getElementById('customGangLogoImg');
+        if (imgLogo) {
+          const testLogo = new Image();
+          testLogo.onload = () => applyLoadedLogo(testLogo.src);
+          testLogo.src = 'image_b7fefa.jpg';
+        }
+      }
 
       const savedSadie = localStorage.getItem('desterrados_sadie_avatar');
-      if (savedSadie) applyLoadedSadie(savedSadie);
+      if (savedSadie) {
+        applyLoadedSadie(savedSadie);
+      } else {
+        // Intentar cargar automáticamente logo sadie.jpg de la misma carpeta
+        const testSadie = new Image();
+        testSadie.onload = () => applyLoadedSadie(testSadie.src);
+        testSadie.src = 'logo sadie.jpg';
+      }
     });
   </script>
 </body>
