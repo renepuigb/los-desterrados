@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Los Desterrados | Cuartel Forajido Westlands V3</title>
+  <!-- Google Fonts: Rye, Cinzel, Inter y Special Elite -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Inter:wght@400;500;600;700&family=Rye&family=Special+Elite&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    :root {
+      --bg-dark: #0a0705;
+      --card-bg: #130e0b;
+      --card-inner: #1a130f;
+      --gold-primary: #d4a338;
+      --gold-dark: #8c651e;
+      --gold-light: #f7d879;
+      --parchment: #e6dac6;
+      --muted: #8a7c6c;
+      --blood-red: #8f231b;
+      --border-outer: #523c1d;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 10%, rgba(140, 101, 30, 0.15), transparent 60%),
+        radial-gradient(rgba(20, 15, 11, 0.9) 1px, transparent 1px);
+      background-size: 100% 100%, 20px 20px;
+      color: var(--parchment);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      margin: 0;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-western { font-family: 'Rye', serif; }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-code { font-family: 'Special Elite', monospace; }
+    .font-readable { font-family: 'Inter', system-ui, sans-serif; }
+
+    .western-border {
+      border: 1px solid var(--gold-dark);
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9), 0 0 10px rgba(0, 0, 0, 0.8);
+      position: relative;
+    }
+
+    .western-border::before {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      border: 1px solid rgba(212, 163, 56, 0.18);
+      pointer-events: none;
+    }
+
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #0d0907;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: var(--gold-dark);
+      border-radius: 3px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-primary);
+    }
+
+    .avatar-interactive {
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .avatar-interactive:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 18px rgba(212, 163, 56, 0.6);
+    }
+    .avatar-badge-edit {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      background: #8f231b;
+      color: #fff;
+      font-size: 10px;
+      border: 1px solid #d4a338;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 6px #000;
+    }
+  </style>
+</head>
+
+<body class="custom-scroll">
+  <div class="w-full max-w-6xl flex flex-col gap-4">
+    
+    <!-- TOP HEADER / BANNER BANDA -->
+    <header class="western-border bg-[#120d0a] p-4 md:p-5 rounded-md flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-4 text-center md:text-left flex-col md:flex-row">
+        
+        <!-- Emblema Oficial Los Desterrados Est. 1876 con Carga Directa -->
+        <div 
+          id="logoContainer"
+          onclick="triggerUpload('logoFileInput')"
+          title="Haz clic para cargar o cambiar tu imagen 'image_b7fefa.jpg'"
+          class="avatar-interactive relative w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-[#d4a338] shadow-[0_0_20px_rgba(212,163,56,0.45)] shrink-0 overflow-hidden bg-[#0c0806] ring-2 ring-[#7a531b]/60 flex items-center justify-center group"
+        >
+          <!-- SVG Renderizado de Alta Fidelidad del Emblema Oficial -->
+          <svg id="fallbackLogoSvg" viewBox="0 0 200 200" class="w-full h-full object-cover">
+            <defs>
+              <radialGradient id="woodBg" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#2c1a0e"/>
+                <stop offset="60%" stop-color="#180e07"/>
+                <stop offset="100%" stop-color="#0a0503"/>
+              </radialGradient>
+              <linearGradient id="hornGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#d9cfb8"/>
+                <stop offset="50%" stop-color="#8a7356"/>
+                <stop offset="100%" stop-color="#3d2c1d"/>
+              </linearGradient>
+            </defs>
+            <circle cx="100" cy="100" r="98" fill="url(#woodBg)" stroke="#8c651e" stroke-width="4"/>
+            <circle cx="100" cy="100" r="92" fill="none" stroke="#d4a338" stroke-dasharray="3,3" stroke-width="1.5" opacity="0.6"/>
+            <circle cx="100" cy="100" r="88" fill="none" stroke="#8f231b" stroke-width="6" opacity="0.85"/>
+            <path id="textArcTop" d="M 25 100 A 75 75 0 0 1 175 100" fill="none"/>
+            <text font-family="'Rye', serif" font-size="13" fill="#e27c6b" font-weight="bold" letter-spacing="2">
+              <textPath href="#textArcTop" startOffset="50%" text-anchor="middle">LOS DESTERRADOS</textPath>
+            </text>
+            <path d="M 100 102 C 60 105 25 78 18 55 C 24 64 45 88 100 95 C 155 88 176 64 182 55 C 175 78 140 105 100 102 Z" fill="url(#hornGrad)" stroke="#1a110a" stroke-width="1.5"/>
+            <path d="M 85 96 C 85 88 115 88 115 96 C 120 108 122 122 118 136 C 114 145 108 152 100 154 C 92 152 86 145 82 136 C 78 122 80 108 85 96 Z" fill="#d9cdb8" stroke="#332418" stroke-width="1.5"/>
+            <ellipse cx="92" cy="118" rx="6" ry="8" fill="#120c08"/>
+            <ellipse cx="108" cy="118" rx="6" ry="8" fill="#120c08"/>
+            <path d="M 98 128 L 102 128 L 100 134 Z" fill="#120c08"/>
+            <path d="M 45 92 C 70 82 130 82 155 92 C 145 87 118 84 100 84 C 82 84 55 87 45 92 Z" fill="#4d3521" stroke="#2b1a0e" stroke-width="1.5"/>
+            <path d="M 72 87 C 70 65 82 52 100 55 C 118 52 130 65 128 87 Z" fill="#66462c" stroke="#2b1a0e" stroke-width="1.5"/>
+            <path d="M 73 83 C 85 80 115 80 127 83 L 128 87 C 115 84 85 84 72 87 Z" fill="#8f231b"/>
+            <path d="M 60 160 L 140 160 L 132 172 L 100 170 L 68 172 Z" fill="#8f231b" stroke="#5c140e"/>
+            <text x="100" y="168" font-family="'Rye', serif" font-size="8.5" fill="#f7d879" text-anchor="middle" font-weight="bold">FUERA DE LA LEY</text>
+            <path id="textArcBottom" d="M 170 120 A 75 75 0 0 1 30 120" fill="none"/>
+            <text font-family="'Cinzel', serif" font-size="7.5" fill="#d4a338" font-weight="bold" letter-spacing="1">
+              <textPath href="#textArcBottom" startOffset="50%" text-anchor="middle">BANDA VAQUERA • FORAJIDOS • EST. 1876</textPath>
+            </text>
+          </svg>
+
+          <!-- Imagen cargada dinámicamente -->
+          <img 
+            id="customGangLogoImg" 
+            src="" 
+            alt="Emblema Los Desterrados" 
+            class="hidden w-full h-full object-cover rounded-full"
+          />
+
+          <span class="avatar-badge-edit" title="Cargar imagen">📷</span>
+          <input type="file" id="logoFileInput" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'logo')">
+        </div>
+
+        <div>
+          <div class="flex items-center justify-center md:justify-start gap-2 mb-1 flex-wrap">
+            <span class="bg-[#8f231b] border border-[#b23228] text-white font-cinzel text-[10px] font-bold px-2 py-0.5 rounded tracking-wider shadow">
+              BANDA VAQUERA
+            </span>
+            <span class="font-cinzel text-xs text-[#d4a338] font-bold tracking-widest uppercase">
+              Westlands Origins V3 • EST. 1876
+            </span>
+          </div>
+          <h1 class="font-western text-2xl md:text-3xl text-[#f7d879] tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+            LOS DESTERRADOS
+          </h1>
+          <p class="text-xs md:text-sm text-[#9c8e7e] italic">
+            "Ni bandera ni amo — La ley de la frontera se respeta o se paga con sangre"
+          </p>
+        </div>
+      </div>
+
+      <!-- Reloj oficial del servidor (España), Cooldown PK y Botón Subir Fotos -->
+      <div class="flex items-center gap-2.5 shrink-0 flex-wrap justify-center">
+        <div class="bg-[#0b0806] border border-[#523c1d] px-3.5 py-1.5 text-center rounded shadow-inner">
+          <div class="font-cinzel text-[9px] text-[#9c8e7e] tracking-widest">HORA SERVIDOR (ESPAÑA)</div>
+          <div id="clockDisplay" class="font-code text-base text-[#e07a1f] font-bold">--:--:--</div>
+        </div>
+        <button onclick="toggleModal('modalTimer')" class="bg-[#8f231b] hover:bg-[#a82a21] border border-[#c93f33] text-white px-3 py-2 rounded text-xs font-cinzel font-bold flex items-center gap-1.5 transition shadow">
+          <span>⏳</span> Cooldowns PK
+        </button>
+        <button onclick="toggleModal('modalFotos')" class="bg-[#1f1610] hover:bg-[#2b1f17] border border-[#d4a338] text-[#f7d879] px-2.5 py-2 rounded text-xs font-cinzel font-bold flex items-center gap-1.5 transition shadow">
+          <span>🖼️</span> Cargar Fotos
+        </button>
+      </div>
+    </header>
+
+    <!-- TABS DE NAVEGACIÓN RÁPIDA -->
+    <nav class="grid grid-cols-2 md:grid-cols-5 gap-2">
+      <button onclick="switchTab('consultor')" id="tab-consultor" class="tab-btn bg-[#d4a338] text-[#0a0705] font-bold border border-[#d4a338] py-2 px-3 rounded text-xs font-cinzel tracking-wider flex items-center justify-center gap-1.5 transition shadow">
+        🤠 Sadie Consultor
+      </button>
+      <button onclick="toggleModal('modalReglamentos')" class="tab-btn bg-[#16100c] hover:bg-[#221812] text-[#f7d879] border border-[#d4a338] py-2 px-3 rounded text-xs font-cinzel tracking-wider flex items-center justify-center gap-1.5 transition">
+        📚 Biblioteca Normativas V3
+      </button>
+      <button onclick="toggleModal('modalTimer')" class="tab-btn bg-[#16100c] hover:bg-[#221812] text-[#e6dac6] border border-[#523c1d] py-2 px-3 rounded text-xs font-cinzel tracking-wider flex items-center justify-center gap-1.5 transition">
+        💀 24h Heridas / RK
+      </button>
+      <button onclick="toggleModal('modalRobos')" class="tab-btn bg-[#16100c] hover:bg-[#221812] text-[#e6dac6] border border-[#523c1d] py-2 px-3 rounded text-xs font-cinzel tracking-wider flex items-center justify-center gap-1.5 transition">
+        💰 Tabla de Robos
+      </button>
+      <button onclick="toggleModal('modalLore')" class="tab-btn bg-[#16100c] hover:bg-[#221812] text-[#e6dac6] border border-[#523c1d] py-2 px-3 rounded text-xs font-cinzel tracking-wider flex items-center justify-center gap-1.5 transition">
+        📜 Lore & Código
+      </button>
+    </nav>
+
+    <!-- HERO CONSULTOR SADIE CON RETRATO DE VAQUERA EN EL SALOON -->
+    <section class="western-border bg-[#130e0b] p-5 rounded-md relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-[#d4a338]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-start md:items-center gap-4 mb-4 flex-col sm:flex-row relative z-10">
+        
+        <!-- Retrato de Sadie: Vaquera Letal en Saloon -->
+        <div 
+          id="sadieHeroContainer"
+          onclick="triggerUpload('sadieFileInput')"
+          title="Haz clic para cargar o cambiar 'logo sadie.jpg'"
+          class="avatar-interactive relative w-20 h-20 md:w-24 md:h-24 rounded-full border-2 border-[#d4a338] shadow-[0_0_20px_rgba(224,122,31,0.5)] shrink-0 overflow-hidden bg-[#1f140e] ring-2 ring-[#d4a338]/40 flex items-center justify-center group"
+        >
+          <!-- Ilustración Vectorial de Sadie Cowgirl -->
+          <svg id="fallbackSadieSvg" viewBox="0 0 200 200" class="w-full h-full object-cover">
+            <defs>
+              <radialGradient id="saloonGlow" cx="60%" cy="40%" r="60%">
+                <stop offset="0%" stop-color="#7a4618"/>
+                <stop offset="60%" stop-color="#3d1f0d"/>
+                <stop offset="100%" stop-color="#140a05"/>
+              </radialGradient>
+              <linearGradient id="hairGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#4a2a18"/>
+                <stop offset="50%" stop-color="#30190c"/>
+                <stop offset="100%" stop-color="#1a0c05"/>
+              </linearGradient>
+              <linearGradient id="skinGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f8d6be"/>
+                <stop offset="100%" stop-color="#e0b292"/>
+              </linearGradient>
+            </defs>
+            <rect width="200" height="200" fill="url(#saloonGlow)"/>
+            <rect x="20" y="0" width="16" height="80" fill="#241309" opacity="0.6"/>
+            <circle cx="28" cy="85" r="9" fill="#ffb443" opacity="0.45"/>
+            <path d="M 60 75 C 40 95 38 140 55 165 C 68 150 72 135 68 120 Z" fill="url(#hairGrad)"/>
+            <path d="M 140 75 C 160 95 162 140 145 165 C 132 150 128 135 132 120 Z" fill="url(#hairGrad)"/>
+            <path d="M 50 195 C 60 160 140 160 150 195 Z" fill="#eee1d1"/>
+            <path d="M 50 195 C 55 168 75 160 85 166 L 82 200 L 50 200 Z" fill="#542e18" stroke="#381d0d"/>
+            <path d="M 150 195 C 145 168 125 160 115 166 L 118 200 L 150 200 Z" fill="#542e18" stroke="#381d0d"/>
+            <path d="M 85 140 C 85 165 115 165 115 140 Z" fill="url(#skinGrad)"/>
+            <path d="M 75 130 C 85 148 115 148 125 130 L 118 155 C 105 165 95 165 82 155 Z" fill="#201a18" stroke="#38302c"/>
+            <path d="M 76 95 C 76 135 124 135 124 95 C 124 75 76 75 76 95 Z" fill="url(#skinGrad)"/>
+            <ellipse cx="88" cy="100" rx="6" ry="3.5" fill="#ffffff"/>
+            <ellipse cx="112" cy="100" rx="6" ry="3.5" fill="#ffffff"/>
+            <circle cx="89" cy="100" r="3" fill="#4d2f1d"/>
+            <circle cx="111" cy="100" r="3" fill="#4d2f1d"/>
+            <circle cx="90" cy="99" r="1" fill="#ffffff"/>
+            <circle cx="112" cy="99" r="1" fill="#ffffff"/>
+            <path d="M 81 94 Q 88 90 95 93" stroke="#2b170c" stroke-width="2" fill="none"/>
+            <path d="M 105 93 Q 112 90 119 94" stroke="#2b170c" stroke-width="2" fill="none"/>
+            <path d="M 91 118 Q 100 115 109 118 Q 100 126 91 118 Z" fill="#b84f48"/>
+            <path d="M 40 78 C 70 58 130 58 160 78 C 145 68 118 64 100 64 C 82 64 55 68 40 78 Z" fill="#3d2516" stroke="#24140a" stroke-width="2"/>
+            <path d="M 68 70 C 66 42 78 32 100 35 C 122 32 134 42 132 70 Z" fill="#5c3822" stroke="#24140a" stroke-width="2"/>
+            <rect x="97" y="62" width="6" height="5" fill="#d4a338" rx="1"/>
+          </svg>
+
+          <!-- Imagen personalizada -->
+          <img 
+            id="customSadieImg" 
+            src="" 
+            alt="Sadie - Vaquera Forajida" 
+            class="hidden w-full h-full object-cover object-top rounded-full"
+          />
+
+          <span class="avatar-badge-edit" title="Cargar foto de Sadie">📷</span>
+          <div class="absolute bottom-1 right-1 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-[#130e0b] shadow-[0_0_8px_#10b981]"></div>
+          <input type="file" id="sadieFileInput" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'sadie')">
+        </div>
+
+        <div class="flex-1">
+          <div class="flex items-center gap-2 mb-0.5">
+            <span class="text-[#d4a338] text-xs font-cinzel font-bold tracking-widest flex items-center gap-1">
+              ⚖️ Juez & Consultora de Normativa Inmediata
+            </span>
+          </div>
+          <h2 class="font-cinzel text-xl md:text-2xl font-bold text-white tracking-wide">
+            Consulta a Sadie antes de apretar el gatillo
+          </h2>
+          <p class="text-xs text-[#a89b8b] italic mt-0.5">
+            "En la frontera un tiro en falso te cuesta la horca o un ban del sheriff administrativo. Pulsa un tema rápido o hazme tu pregunta antes de iniciar el asalto."
+          </p>
+        </div>
+      </div>
+
+      <!-- CHIPS DE ACCESO DIRECTO -->
+      <div class="relative z-10">
+        <div class="font-cinzel text-[10px] text-[#d4a338] font-bold tracking-wider uppercase mb-2 flex items-center gap-1">
+          <span>⚡</span> Casos Críticos & Comandos de Rol Frecuentes:
+        </div>
+        <div class="flex flex-wrap gap-1.5" id="chipsContainer">
+          <!-- Botones chips generados por JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKSPACE PRINCIPAL (INPUT + LEY DE ORO + CAJA DE RESPUESTA) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      
+      <!-- COLUMNA IZQUIERDA: INPUT Y LEY DE ORO (5 cols) -->
+      <div class="lg:col-span-5 flex flex-col gap-4">
+        
+        <!-- Buscador de duda -->
+        <div class="western-border bg-[#130e0b] p-4 rounded-md">
+          <label for="userQuery" class="block font-cinzel text-xs text-[#d4a338] font-bold tracking-wider uppercase mb-2">
+            💬 Escribe tu duda o palabra clave
+          </label>
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="userQuery" 
+              placeholder="ej. puedo usar escopeta en el banco..." 
+              class="w-full bg-[#0a0705] border border-[#523c1d] focus:border-[#d4a338] rounded px-3 py-2 text-sm text-[#e6dac6] placeholder-[#5c4f43] outline-none transition font-readable font-medium"
+              onkeydown="if(event.key==='Enter') executeSadieSearch()"
+            >
+            <button 
+              onclick="executeSadieSearch()" 
+              class="bg-[#d4a338] hover:bg-[#e6b547] text-[#0a0705] font-cinzel font-bold text-xs px-4 rounded transition tracking-wider shrink-0 shadow"
+            >
+              Preguntar
+            </button>
+          </div>
+          <p class="text-[11px] text-[#8a7c6c] mt-2 italic font-readable">
+            Búsqueda instantánea en reglamentos: General V3, Forajidos V3, Empresas V3, Médicos y Milicia.
+          </p>
+        </div>
+
+        <!-- Ley de Oro en Tiroteos (Tarjeta Fija) -->
+        <div class="western-border bg-[#130e0b] border-[#5c140e] p-4 rounded-md">
+          <h3 class="font-cinzel text-xs text-[#e06055] font-black tracking-wider uppercase mb-3 flex items-center gap-1.5">
+            <span>⚠️</span> Ley de Oro en Tiroteos & Fairplay
+          </h3>
+          <ul class="text-xs space-y-2 text-[#d1c4b2] font-readable leading-relaxed">
+            <li class="flex items-start gap-2">
+              <span class="text-[#f28b82] shrink-0 font-bold">🚫</span>
+              <span><strong>Prohibido usar tecla Q</strong> para cubrirse o disparar escondido/asomando.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[#f28b82] shrink-0 font-bold">🚫</span>
+              <span><strong>Prohibido usar vendas o tónicos</strong> en mitad de un PVP abierto.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[#a8dab5] shrink-0 font-bold">✔️</span>
+              <span><strong>1 Escopeta y 1 Rifle</strong> máximo por bando en cualquier enfrentamiento.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[#fdd663] shrink-0 font-bold">⏳</span>
+              <span><strong>30 min antes y después</strong> de reinicios (07:00 y 19:00) prohibido robar.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-[#e07a1f] shrink-0 font-bold">⚠️</span>
+              <span><strong>Emboscadas:</strong> Obligatorio dar 2 tiros al aire para dar FairPlay al Sheriff.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- COLUMNA DERECHA: RESPUESTA DE SADIE CON TIPOGRAFÍA CLARA -->
+      <div class="lg:col-span-7">
+        <div class="western-border bg-[#140e0b] p-5 rounded-md min-h-[350px] flex flex-col justify-between shadow-2xl">
+          <div>
+            <div class="flex justify-between items-center pb-3 border-b border-[#2b1f16] mb-4">
+              <div class="flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
+                <span class="font-cinzel text-xs text-[#d4a338] font-bold tracking-widest uppercase">
+                  Respuesta Inmediata de Sadie
+                </span>
+              </div>
+              <span id="sadieTag" class="bg-[#1f1610] border border-[#523c1d] text-[#a89b8b] text-[9px] font-cinzel px-2.5 py-0.5 rounded tracking-wider">
+                REGLAMENTO ACTIVO
+              </span>
+            </div>
+
+            <!-- Contenido de respuesta -->
+            <div class="flex gap-4 items-start">
+              <div 
+                onclick="triggerUpload('sadieFileInput')"
+                title="Cambiar foto de Sadie"
+                class="avatar-interactive w-14 h-14 rounded-full border border-[#d4a338] bg-[#1a110a] shrink-0 overflow-hidden shadow-md ring-1 ring-[#d4a338]/30 flex items-center justify-center"
+              >
+                <div id="sadieMiniSvgWrapper" class="w-full h-full flex items-center justify-center text-xl bg-[#2b180d]">
+                  🤠
+                </div>
+                <img 
+                  id="customSadieMiniImg"
+                  src="" 
+                  alt="Sadie" 
+                  class="hidden w-full h-full object-cover object-top"
+                />
+              </div>
+
+              <div class="flex-1 space-y-3 font-readable">
+                <p id="sadieQuote" class="text-base md:text-lg text-[#fed976] font-semibold leading-relaxed tracking-normal">
+                  "Dime qué golpe tienes planeado o qué duda te carcome, forajido. Las leyes de Westlands no perdonan despistes y no quiero tener que ir a buscarte al cementerio de Blackwater."
+                </p>
+                <div id="sadieExplanation" class="text-xs md:text-sm text-[#e2d7c5] leading-relaxed bg-[#0a0705] p-3.5 rounded border border-[#2b1f16] shadow-inner font-normal">
+                  Toca cualquiera de los botones de arriba para una respuesta inmediata o escribe lo que vas a hacer. Recuerda que cada paso en falso nos cuesta el proyecto de banda ante el Sheriff o la Administración.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-[#2b1f16] flex justify-between items-center text-[10px] text-[#8a7c6c] font-cinzel">
+            <span id="sadieSource">📖 Base: Forajidos V3 & Normativa General</span>
+            <span>Westlands Origins RP V3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROTOCOLOS RÁPIDOS DE COMANDOS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-readable">
+      <div class="western-border bg-[#100b08] p-3 rounded flex items-center justify-between">
+        <div>
+          <span class="text-[#d4a338] font-cinzel font-bold text-xs">/testigo</span>
+          <p class="text-[#a39482] text-[11px] mt-0.5">Obligatorio antes de iniciar el ilícito. Detalla ruta, ropa y caballos.</p>
+        </div>
+        <button onclick="copyCommand('/testigo 3 encapuchados con ropa de cuero asaltan diligencia huyendo hacia Thieves Landing')" class="bg-[#1f1611] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2.5 py-1.5 rounded font-cinzel text-[10px] font-bold">
+          Copiar Ej.
+        </button>
+      </div>
+
+      <div class="western-border bg-[#100b08] p-3 rounded flex items-center justify-between">
+        <div>
+          <span class="text-[#d4a338] font-cinzel font-bold text-xs">/polidispo</span>
+          <p class="text-[#a39482] text-[11px] mt-0.5">Obligatorio desde Boticaria en adelante para pedir autorización.</p>
+        </div>
+        <button onclick="copyCommand('/polidispo')" class="bg-[#1f1611] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2.5 py-1.5 rounded font-cinzel text-[10px] font-bold">
+          Copiar
+        </button>
+      </div>
+
+      <div class="western-border bg-[#100b08] p-3 rounded flex items-center justify-between">
+        <div>
+          <span class="text-[#d4a338] font-cinzel font-bold text-xs">ALT al Robar</span>
+          <p class="text-[#a39482] text-[11px] mt-0.5">Obligatorio usar menú ALT. Máx 50% de armas/items. Dinero todo.</p>
+        </div>
+        <span class="text-[10px] text-[#34d399] font-cinzel font-bold border border-[#2b4c30] bg-[#112415] px-2 py-0.5 rounded">Norma OOC</span>
+      </div>
+    </div>
+
+    <!-- FOOTER GENERAL -->
+    <footer class="pt-3 pb-6 flex flex-col sm:flex-row justify-between items-center text-xs text-[#8a7c6c] border-t border-[#261b13] gap-2 font-readable">
+      <div class="flex items-center gap-2">
+        <span class="text-[#d4a338]">💀</span>
+        <span><strong>Los Desterrados (Est. 1876)</strong> • Servidor Privado Westlands Origins V3</span>
+      </div>
+      <div class="italic text-[11px] text-[#b3a391]">
+        "Desierto, Polvo y Fuego — Compañero en el frente, plomo al traidor."
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL: TABLA COMPLETA DE ROBOS -->
+  <div id="modalRobos" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4 font-readable" onclick="if(event.target===this) toggleModal('modalRobos')">
+    <div class="western-border bg-[#140e0b] max-w-4xl w-full max-h-[85vh] flex flex-col rounded-md shadow-2xl">
+      <div class="p-4 border-b border-[#523c1d] flex justify-between items-center bg-[#18110d]">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">💰</span>
+          <h3 class="font-western text-lg text-[#f7d879] tracking-wider">Tabla Oficial de Robos (Forajidos V3)</h3>
+        </div>
+        <button onclick="toggleModal('modalRobos')" class="text-[#8a7c6c] hover:text-white text-2xl font-bold leading-none">&times;</button>
+      </div>
+      
+      <div class="p-4 overflow-y-auto custom-scroll flex-1">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-[#1f1610] text-[#d4a338] font-cinzel border-b border-[#523c1d]">
+              <th class="p-2.5">Robo</th>
+              <th class="p-2.5">Quién Puede</th>
+              <th class="p-2.5">Armas Permitidas</th>
+              <th class="p-2.5">Límite / Frecuencia</th>
+              <th class="p-2.5">Asaltantes</th>
+              <th class="p-2.5">Sheriff Máx</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#2e2016] text-[#e6dac6]">
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Tumbas / Cultivos / Cuatreros</td>
+              <td class="p-2.5">Todos</td>
+              <td class="p-2.5 text-[#e07a1f]">Revólver</td>
+              <td class="p-2.5">Ilimitado</td>
+              <td class="p-2.5">1 - 2</td>
+              <td class="p-2.5">2</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Barberías / Tiendas</td>
+              <td class="p-2.5">Todos</td>
+              <td class="p-2.5 text-[#e07a1f]">Revólver</td>
+              <td class="p-2.5">2 al día por org.</td>
+              <td class="p-2.5">1 - 2</td>
+              <td class="p-2.5">2</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e] bg-[#1a120c]/40">
+              <td class="p-2.5 font-bold text-[#f7d879]">Casa</td>
+              <td class="p-2.5 text-[#d4a338]">PDB (Banda)</td>
+              <td class="p-2.5 text-[#e07a1f]">Revólver</td>
+              <td class="p-2.5">Ilimitado</td>
+              <td class="p-2.5">2 - 4</td>
+              <td class="p-2.5">4</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Boticaria</td>
+              <td class="p-2.5 text-[#d4a338]">PDB (/polidispo)</td>
+              <td class="p-2.5 text-[#e07a1f]">Revólver</td>
+              <td class="p-2.5">2 semanales</td>
+              <td class="p-2.5">2 - 4</td>
+              <td class="p-2.5">4 - 6</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Casa de Empeños</td>
+              <td class="p-2.5 text-[#d4a338]">PDB (/polidispo)</td>
+              <td class="p-2.5 text-[#e07a1f]">Revólver</td>
+              <td class="p-2.5">2 semanales</td>
+              <td class="p-2.5">3 - 5</td>
+              <td class="p-2.5">4 - 6</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e] bg-[#1a120c]/40">
+              <td class="p-2.5 font-bold text-[#f7d879]">Diligencia</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 1</td>
+              <td class="p-2.5 text-[#a8dab5]">A elección</td>
+              <td class="p-2.5">3 semanales</td>
+              <td class="p-2.5">4 - 6</td>
+              <td class="p-2.5">4 - 6</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Almacén / Galería de Arte</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 1</td>
+              <td class="p-2.5 text-[#a8dab5]">A elección</td>
+              <td class="p-2.5">1-2 semanales</td>
+              <td class="p-2.5">3 - 8</td>
+              <td class="p-2.5">6 - 8</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Sucursal</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 1</td>
+              <td class="p-2.5 text-[#a8dab5]">A elección</td>
+              <td class="p-2.5">1 por semana</td>
+              <td class="p-2.5">4 - 8</td>
+              <td class="p-2.5">8</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e] bg-[#1a120c]/40">
+              <td class="p-2.5 font-bold text-[#f7d879]">Joyería / Armería</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 2</td>
+              <td class="p-2.5 text-[#a8dab5]">A elección</td>
+              <td class="p-2.5">1-2 semanales</td>
+              <td class="p-2.5">3 - 8</td>
+              <td class="p-2.5">6 - 8</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Casino</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 2</td>
+              <td class="p-2.5 text-[#e07a1f]">Revólver (Sin negociar)</td>
+              <td class="p-2.5">1 por semana</td>
+              <td class="p-2.5">8 - 10</td>
+              <td class="p-2.5">12</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Banco Estatal</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 3</td>
+              <td class="p-2.5 text-[#a8dab5]">A elección</td>
+              <td class="p-2.5">1 cada 2 semanas</td>
+              <td class="p-2.5">8 - 10</td>
+              <td class="p-2.5">12</td>
+            </tr>
+            <tr class="hover:bg-[#1a120e]">
+              <td class="p-2.5 font-bold text-[#f7d879]">Banco Federal</td>
+              <td class="p-2.5 text-[#d4a338]">Banda Nivel 3</td>
+              <td class="p-2.5 text-[#a8dab5]">A elección</td>
+              <td class="p-2.5">1 al mes</td>
+              <td class="p-2.5">8 - 12</td>
+              <td class="p-2.5">12</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: COMPENDIO INTEGRAL DE NORMATIVAS Y ROLES WESTLANDS V3 -->
+  <div id="modalReglamentos" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-3 md:p-5 font-readable" onclick="if(event.target===this) toggleModal('modalReglamentos')">
+    <div class="western-border bg-[#140e0b] max-w-5xl w-full max-h-[90vh] flex flex-col rounded-md shadow-2xl">
+      <div class="p-3 md:p-4 border-b border-[#523c1d] flex justify-between items-center bg-[#18110d]">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📚</span>
+          <div>
+            <h3 class="font-western text-base md:text-lg text-[#f7d879]">Compendio de Reglas y Facciones Westlands Origins V3</h3>
+            <p class="text-[11px] text-[#8a7c6c]">Consulta manual detallada de normativas oficiales si requieres revisar el texto íntegro.</p>
+          </div>
+        </div>
+        <button onclick="toggleModal('modalReglamentos')" class="text-[#8a7c6c] hover:text-white text-2xl font-bold leading-none">&times;</button>
+      </div>
+
+      <!-- Selector de categoría dentro del compendio -->
+      <div class="p-3 bg-[#0d0906] border-b border-[#2b1f15] flex gap-1.5 overflow-x-auto custom-scroll text-xs">
+        <button onclick="showRuleTab('general')" id="rtab-general" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#d4a338] text-[#0a0705] transition shrink-0">General & Roles</button>
+        <button onclick="showRuleTab('forajidos')" id="rtab-forajidos" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Forajidos & Bandas</button>
+        <button onclick="showRuleTab('comandos')" id="rtab-comandos" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Guía de Comandos</button>
+        <button onclick="showRuleTab('empresas')" id="rtab-empresas" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Comercio & Empresas</button>
+        <button onclick="showRuleTab('ley')" id="rtab-ley" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Sheriff & Milicia</button>
+        <button onclick="showRuleTab('medicos')" id="rtab-medicos" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Médica & Rangers</button>
+        <button onclick="showRuleTab('nativos')" id="rtab-nativos" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Indios & Ambarino</button>
+        <button onclick="showRuleTab('gobierno')" id="rtab-gobierno" class="px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0">Gobierno & Alcaldías</button>
+      </div>
+
+      <!-- Contenedor dinámico de contenidos -->
+      <div id="ruleContentArea" class="p-4 md:p-5 overflow-y-auto custom-scroll flex-1 text-xs space-y-4 text-[#e6dac6] leading-relaxed">
+        <!-- Renderizado dinámico vía JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TEMPORIZADOR 24H HERIDAS / RK -->
+  <div id="modalTimer" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4 font-readable" onclick="if(event.target===this) toggleModal('modalTimer')">
+    <div class="western-border bg-[#140e0b] max-w-md w-full p-5 rounded-md shadow-2xl text-center">
+      <div class="flex justify-between items-center pb-2 border-b border-[#523c1d] mb-4">
+        <h3 class="font-western text-base text-[#f7d879]">Temporizador 24h Heridas / RK</h3>
+        <button onclick="toggleModal('modalTimer')" class="text-[#8a7c6c] hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <p class="text-xs text-[#d1c4b2] mb-3 leading-relaxed">
+        Si tu personaje cayó abatido o sufrió heridas de gravedad, la normativa prohíbe volver a entrar en un tiroteo o ejecutar venganza (Revenge Kill) antes de 24 horas reales.
+      </p>
+
+      <div class="bg-[#0b0705] border border-[#523c1d] py-4 px-6 rounded my-4">
+        <div class="font-cinzel text-[10px] text-[#8a7c6c] tracking-widest uppercase mb-1">Tiempo de Convalecencia Restante</div>
+        <div id="injuryCountdown" class="font-code text-3xl md:text-4xl text-[#d4a338] tracking-widest font-bold">24:00:00</div>
+        <div id="timerStatus" class="text-[10px] text-[#8a7c6c] mt-1 font-cinzel">Sin heridas registradas</div>
+      </div>
+
+      <div class="flex gap-2 justify-center">
+        <button onclick="startInjuryTimer()" class="bg-[#8f231b] hover:bg-[#a82a21] border border-[#c93f33] text-white font-cinzel text-xs font-bold py-2 px-4 rounded transition">
+          Iniciar 24h Cooldown
+        </button>
+        <button onclick="resetInjuryTimer()" class="bg-[#1f1610] hover:bg-[#2b1f17] border border-[#523c1d] text-[#a89b8b] font-cinzel text-xs py-2 px-3 rounded transition">
+          Reiniciar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: LORE Y CÓDIGO DE LOS DESTERRADOS -->
+  <div id="modalLore" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4 font-readable" onclick="if(event.target===this) toggleModal('modalLore')">
+    <div class="western-border bg-[#140e0b] max-w-2xl w-full max-h-[85vh] flex flex-col rounded-md shadow-2xl">
+      <div class="p-4 border-b border-[#523c1d] flex justify-between items-center bg-[#18110d]">
+        <h3 class="font-western text-lg text-[#f7d879]">Lore & Código de Los Desterrados</h3>
+        <button onclick="toggleModal('modalLore')" class="text-[#8a7c6c] hover:text-white text-2xl font-bold">&times;</button>
+      </div>
+      <div class="p-5 overflow-y-auto custom-scroll space-y-4 text-xs leading-relaxed text-[#d1c4b2]">
+        <div class="border-l-2 border-[#d4a338] pl-3 italic text-[#f7d879]">
+          "Una banda mixta de ambos lados de la frontera: mexicanos y anglos unidos no por nacionalidad sino por haber sido traicionados por la ley, los hacendados o el gobierno. No roban por robar: cada golpe tiene un blanco específico."
+        </div>
+        <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase">Código de Honor Forajido</h4>
+        <ol class="list-decimal pl-4 space-y-1">
+          <li><strong>Nunca se roba a los pobres</strong>, solo a quien tiene con qué pagar.</li>
+          <li><strong>La palabra dada no se rompe</strong>, ni con enemigos.</li>
+          <li><strong>Nadie se queda atrás:</strong> si uno cae, todos vuelven por él.</li>
+          <li><strong>Los negocios de la banda</strong> no salen de la banda.</li>
+        </ol>
+        <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase">Estructura de la Banda (6 Miembros)</h4>
+        <ul class="list-disc pl-4 space-y-1">
+          <li><strong>1. El Líder:</strong> Cabeza fría, estratega y selector de blancos.</li>
+          <li><strong>2. Mano Derecha:</strong> Pistolero rápido y ejecutor en terreno.</li>
+          <li><strong>3. As bajo la Manga:</strong> Especialista en explosivos, rastreo o telégrafos.</li>
+          <li><strong>4. El Verdugo:</strong> Despiadado con traidores; cobra deudas con plomo.</li>
+          <li><strong>5. Francotirador / Vigía:</strong> Ojos y oídos desde las alturas; cubre emboscadas.</li>
+          <li><strong>6. Infiltrado / Cara Amable:</strong> Negociador entre pueblos sin levantar sospechas.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: GESTOR DE FOTOS PERSISTENTES -->
+  <div id="modalFotos" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden items-center justify-center p-4 font-readable" onclick="if(event.target===this) toggleModal('modalFotos')">
+    <div class="western-border bg-[#140e0b] max-w-lg w-full p-5 rounded-md shadow-2xl">
+      <div class="flex justify-between items-center pb-2 border-b border-[#523c1d] mb-4">
+        <h3 class="font-western text-base text-[#f7d879]">Cargar Imágenes Personalizadas</h3>
+        <button onclick="toggleModal('modalFotos')" class="text-[#8a7c6c] hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <p class="text-xs text-[#d1c4b2] mb-4">
+        Selecciona las imágenes directamente desde tu PC o celular. La app las guarda automáticamente en tu navegador para que nunca se borren.
+      </p>
+
+      <div class="space-y-4">
+        <div class="bg-[#0b0806] border border-[#523c1d] p-3 rounded flex items-center justify-between">
+          <div>
+            <div class="font-cinzel text-xs text-[#d4a338] font-bold">Emblema Los Desterrados</div>
+            <div class="text-[11px] text-[#8a7c6c]">Archivo recomendado: image_b7fefa.jpg</div>
+          </div>
+          <button onclick="triggerUpload('logoFileInput')" class="bg-[#8f231b] hover:bg-[#a82a21] text-white px-3 py-1.5 rounded text-xs font-cinzel font-bold">
+            Elegir Foto
+          </button>
+        </div>
+
+        <div class="bg-[#0b0806] border border-[#523c1d] p-3 rounded flex items-center justify-between">
+          <div>
+            <div class="font-cinzel text-xs text-[#d4a338] font-bold">Retrato de Sadie Cowgirl</div>
+            <div class="text-[11px] text-[#8a7c6c]">Archivo recomendado: logo sadie.jpg</div>
+          </div>
+          <button onclick="triggerUpload('sadieFileInput')" class="bg-[#8f231b] hover:bg-[#a82a21] text-white px-3 py-1.5 rounded text-xs font-cinzel font-bold">
+            Elegir Foto
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-[#2b1f16] flex justify-end">
+        <button onclick="toggleModal('modalFotos')" class="bg-[#1f1610] text-[#e6dac6] border border-[#523c1d] px-4 py-1.5 rounded text-xs font-cinzel">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // BASE DE CONOCIMIENTO INTEGRADA DE SADIE (TODAS LAS NORMATIVAS Y COMANDOS)
+    const SADIE_KNOWLEDGE = {
+      comandos: {
+        chip: "⌨️ Comandos Disponibles",
+        quote: "Los comandos de rol en Westlands son la base para no cometer PG ni MG: /me (acciones físicas presentes), /do (entorno, estado y preguntas), /dol (heridas y entorno de corto alcance), /mel (gestos sutiles), /testigo (obligatorio en crímenes), /polidispo (para pedir autorización al sheriff), /auxilio (al caer en PK) y /rumor (para noticias o empresas).",
+        explanation: "Usa /me para acciones que el motor del juego no hace. Usa /do para describir percepciones sin mentir. Usa /dol y /mel en escenas médicas cerradas para no ensuciar el chat general. En actos ilegales es obligatorio tirar /testigo antes de empezar.",
+        source: "Normativa General V3 - Sec. 2.1 (Comandos IC) y Forajidos V3"
+      },
+      dol: {
+        chip: "🩺 ¿Dónde usar /dol?",
+        quote: "El comando /dol se utiliza para emitir descripciones de dolor, sensaciones físicas, heridas profundas o detalles médicos a corto alcance (rango local). Su uso rey es cuando un doctor te atiende, para responder preguntas sobre tus heridas sin que lo lea todo el pueblo.",
+        explanation: "Ejemplo: '/dol se aprecia un sangrado abundante por orificio de bala en el hombro izquierdo con proyectil alojado'. Está terminantemente prohibido mentir por /dol o /do sobre el estado de tu cuerpo para sacar ventaja.",
+        source: "Normativa General V3 - Sec. 2.1.3 & Normativa Médica V3"
+      },
+      me_do: {
+        chip: "🎭 ¿Cómo usar /me y /do?",
+        quote: "El /me es para acciones en 3ª persona del presente que tu muñeco no hace ('/me desenfunda despacio con la diestra'). El /do es para describir sensaciones o pedir confirmación con respeto ('/do ¿podría atar sus muñecas?'). ¡Nunca uses /me para emociones internas ni /do para forzar la acción del otro!",
+        explanation: "Mal uso de /me: '/me está enfadado' (las emociones se rolean con la voz y el diálogo). Mal uso de /do: '/do nota que tengo un tatuaje' sin que sea visible o '/do le rompe el brazo' (eso es Powergaming).",
+        source: "Normativa General V3 - Art. 2.1.1 y 2.1.2"
+      },
+      testigo: {
+        chip: "📜 Comando /testigo",
+        quote: "El /testigo es OBLIGATORIO antes de iniciar cualquier acto delictivo, emboscada, asalto o contrabando. Se redacta en 3ª persona como si un civil te estuviera viendo: número de asaltantes, ropas, caballos, carros y dirección exacta de huida.",
+        explanation: "En secuestros, además del /testigo inicial, es obligatorio mandar testigos periódicos cada 45 a 60 segundos por los caminos para ofrecer FairPlay a las autoridades sobre el rumbo que toman.",
+        source: "Normativa Forajidos V3 - Art. 12 & Normativa General Art. 2.7.2"
+      },
+      polidispo: {
+        chip: "🚨 Comando /polidispo",
+        quote: "El /polidispo se usa para consultar disponibilidad de la ley antes de asaltar boticarias, casas de empeño, sucursales, joyerías, armerías o bancos. ¡No puedes empezar a forzar ni meter bala hasta que el cuerpo policial confirme por el sistema!",
+        explanation: "En atracos a diligencias no es necesario /polidispo. Pero en robos medianos y mayores es requisito administrativo esperar confirmación para evitar que el golpe quede desierto o sin agentes suficientes según la tabla de robos.",
+        source: "Normativa Forajidos V3 - Art. 5.5 (Disponibilidad de Robos)"
+      },
+      auxilio: {
+        chip: "🆘 Comando /auxilio",
+        quote: "Al quedar inconsciente o en estado de PK, es obligatorio tirar /auxilio indicando el motivo de la caída, el lugar y si aún hay peligro cerca, redactado como si un testigo lo estuviera presenciando.",
+        explanation: "Ejemplo: '/auxilio ¡Un forajido ha caído con impacto de bala cerca de Valentine, los tiradores ya huyeron!'. Si hay médicos de servicio, no puedes tirar de la 'E' para reaparecer.",
+        source: "Normativa General V3 - Art. 2.7.1 & Médica Art. 11"
+      },
+      alt_robar: {
+        chip: "🖐️ Menú ALT al Robar",
+        quote: "Para robar a jugadores es obligatorio usar la interacción del menú ALT. Solo puedes quedarte con el 50% de sus armas y objetos (número impar favorece a la víctima). El dinero se roba al 100%. ¡Prohibido robar comida, bebida o cuchillos básicos!",
+        explanation: "Solo se puede robar en caminos, callejones o zonas despobladas. En mitad de ciudades o a doctores en servicio está estrictamente prohibido por Rol de Entorno (RDE).",
+        source: "Normativa Forajidos V3 - Art. 6.1 (Límites de Robo)"
+      },
+      casas: {
+        chip: "🏚️ Robo a Casas",
+        quote: "Para entrar a una casa necesitas ser mínimo PDB (Proyecto de Banda). De 2 a 4 asaltantes y acudirán 4 agentes. ¡Solo revólver y nada de campear dentro!",
+        explanation: "Normativa Forajidos V3: En casas no es necesario negociar, se autoriza automáticamente la fuerza letal si la ley irrumpe. Queda terminantemente prohibido esperar o campear en la puerta o interiores.",
+        source: "Normativa Forajidos V3 - Art. 5.1 (Tabla de Robos)"
+      },
+      doctor: {
+        chip: "💉 Respeto al Doctor",
+        quote: "Si te atiende un médico, es sagrado responder con la verdad por /dol o /do sobre tus heridas. ¡Y ni se te ocurra asaltarlo mientras atiende a un herido o acude a un aviso!",
+        explanation: "Normativa Médica & General: Mentir por /do sobre heridas es sancionable. Además, está expresamente prohibido asaltar o retener a un doctor que acude a un aviso o se encuentra tratando a un paciente.",
+        source: "Normativa General V3 (Heridas) & Sociedad Médica V3"
+      },
+      cultivos: {
+        chip: "🌾 Horario de Cultivos",
+        quote: "A los huertos ajenos solo se les mete mano de noche: entre las 20:00 y las 02:00 hora de España. Fuera de ese horario te cae sanción directa.",
+        explanation: "Robo a cultivos de jugadores: Horario estricto de 20:00 a 02:00 (hora peninsular española). De 1 a 2 asaltantes con revólver, máximo acuden 2 del Sheriff.",
+        source: "Normativa Empresas V3 - Art. 10.8 & Forajidos V3"
+      },
+      conflicto: {
+        chip: "⚒️ Trabajos Prohibidos",
+        quote: "Ningún Desterrado puede tener de tapadera armerías, herrerías, minas, establos ni bancos. ¡Eso es conflicto de intereses directo con administración!",
+        explanation: "Las organizaciones criminales e ilegales tienen vetado regentar o trabajar en negocios estratégicos. Solo pueden operar negocios menores o de rol (tabernas, locales) mediante testaferros limpios.",
+        source: "Normativa Empresas V3 - Art. 14 & Forajidos V3"
+      },
+      teclaQ: {
+        chip: "🛡️ Prohibido Tecla Q",
+        quote: "¡Ni se te ocurra tocar la tecla Q en un tiroteo! Está terminantemente prohibido usar la cobertura automática para disparar escondido o asomar.",
+        explanation: "Queda totalmente prohibido el uso de la tecla Q durante tiroteos, ya sea para esconderse o para asomar disparando. Es una falta grave de combate en Westlands.",
+        source: "Normativa General V3 - Art. 4 (Roles Agresivos)"
+      },
+      heridas: {
+        chip: "💀 24h Heridas / RK",
+        quote: "Si te tumbaron, te toca cargar con el dolor 24 horas reales. Nada de Revenge Kill ni meterte a otro tiroteo antes de que el reloj cumpla su ciclo.",
+        explanation: "Tras caer en estado de PK, no puedes iniciar otro enfrentamiento PVP ni buscar venganza contra tu agresor durante 24 horas reales. Si te lo cruzas por pura casualidad IC, solo puedes actuar si hay motivo de peso previo.",
+        source: "Normativa General V3 - Art. 3.7 & Art. 5 (Heridas)"
+      },
+      armas: {
+        chip: "🔫 Límite Armas Largas",
+        quote: "Para mantener un tiroteo limpio: solo se permite MÁXIMO 1 escopeta y 1 rifle por bando. El resto a punta de revólver y repetidora.",
+        explanation: "Límite de armamento por grupo: Con el fin de evitar ventajas injustas (Win-to-Win), solo se autoriza 1 escopeta y 1 rifle por bando en cualquier enfrentamiento armado en el servidor.",
+        source: "Normativa Forajidos V3 - Art. 5.4 (PVP Sano)"
+      },
+      extorsion: {
+        chip: "🪙 Extorsión a Negocios",
+        quote: "Para extorsionar un negocio debes tener rol previo con el dueño. El tope máximo son $200 semanales. ¡Y negarse jamás amerita CK!",
+        explanation: "Debe existir motivo justificado y rol previo (no llegar a ciegas). Límite de 200$ semanales en efectivo o mercancía. Las extorsiones requieren aprobación previa de STAFF por ticket.",
+        source: "Normativa Empresas V3 - Art. 9 & Forajidos V3"
+      },
+      drogas: {
+        chip: "🌿 Venta de Droga",
+        quote: "Máximo 2 miembros vendiendo a la vez en todo el servidor. Siempre a pie, nunca a caballo, y tiras /testigo solo si el NPC te rechaza la venta.",
+        explanation: "Solo 2 personas por banda vendiendo droga simultáneamente. La policía responde con +1 por venta. La droga solo se saca de las alforjas fuera del radio del punto caliente.",
+        source: "Normativa Forajidos V3 - Art. 7.3"
+      },
+      ambarino: {
+        chip: "🏹 Ambarino & Nativos",
+        quote: "Ambarino es tierra nativa fuera de jurisdicción de EE.UU. Allí no se usan testigos ni acuden médicos. Si los indios te emboscan deben disparar 2 tiros al aire de Fairplay.",
+        explanation: "En Ambarino la ley es la del más fuerte. Solo el poblado de Wapiti tiene rol de entorno favorable pacífico. No se puede entrar a roles cerrados en Ambarino sumando más atacantes de los permitidos.",
+        source: "Normativa de Indios Nativos V3 - Art. 2 y 12"
+      }
+    };
+
+    // GENERAR BOTONES CHIPS EN EL BANNER
+    const chipsBox = document.getElementById('chipsContainer');
+    Object.keys(SADIE_KNOWLEDGE).forEach(key => {
+      const item = SADIE_KNOWLEDGE[key];
+      const btn = document.createElement('button');
+      btn.className = "bg-[#1c140f] hover:bg-[#2b1f17] hover:text-[#d4a338] hover:border-[#d4a338] text-[#e6dac6] border border-[#4a3821] px-2.5 py-1 rounded text-xs font-cinzel transition flex items-center gap-1.5 shadow-sm";
+      btn.innerHTML = item.chip;
+      btn.onclick = () => renderSadieAnswer(key);
+      chipsBox.appendChild(btn);
+    });
+
+    // RENDERIZAR RESPUESTA DE SADIE
+    function renderSadieAnswer(key) {
+      const data = SADIE_KNOWLEDGE[key];
+      if (!data) return;
+      document.getElementById('sadieQuote').innerText = `"${data.quote}"`;
+      document.getElementById('sadieExplanation').innerText = data.explanation;
+      document.getElementById('sadieSource').innerText = `📖 Base: ${data.source}`;
+      document.getElementById('sadieTag').innerText = "ARTÍCULO APLICADO";
+    }
+
+    // MOTOR DE BÚSQUEDA RÁPIDO Y EXPANDIDO DE SADIE
+    function executeSadieSearch() {
+      const input = document.getElementById('userQuery');
+      const q = input.value.toLowerCase().trim();
+      if (!q) return;
+
+      if (q.includes('/dol') || q.includes('dol')) {
+        renderSadieAnswer('dol');
+      } else if (q.includes('/me') || q.includes('/do') || q.includes('como usar me') || q.includes('como usar do')) {
+        renderSadieAnswer('me_do');
+      } else if (q.includes('/testigo') || q.includes('testigo')) {
+        renderSadieAnswer('testigo');
+      } else if (q.includes('/polidispo') || q.includes('polidispo') || q.includes('pedir policia') || q.includes('disponibilidad')) {
+        renderSadieAnswer('polidispo');
+      } else if (q.includes('/auxilio') || q.includes('auxilio')) {
+        renderSadieAnswer('auxilio');
+      } else if (q.includes('alt') || q.includes('robar a jugador') || q.includes('menu alt')) {
+        renderSadieAnswer('alt_robar');
+      } else if (q.includes('comando') || q.includes('comandos') || q.includes('lista de comandos')) {
+        renderSadieAnswer('comandos');
+      } else if (q.includes('q') || q.includes('cubrir') || q.includes('asomar')) {
+        renderSadieAnswer('teclaQ');
+      } else if (q.includes('casa') || q.includes('hogar')) {
+        renderSadieAnswer('casas');
+      } else if (q.includes('medico') || q.includes('doctor') || q.includes('venda') || q.includes('curar') || q.includes('tonico')) {
+        renderSadieAnswer('doctor');
+      } else if (q.includes('cultivo') || q.includes('huerto') || q.includes('planta') || q.includes('cosecha')) {
+        renderSadieAnswer('cultivos');
+      } else if (q.includes('arma') || q.includes('escopeta') || q.includes('rifle') || q.includes('repetidora')) {
+        renderSadieAnswer('armas');
+      } else if (q.includes('extorsion') || q.includes('200') || q.includes('negocio') || q.includes('cobrar piso')) {
+        renderSadieAnswer('extorsion');
+      } else if (q.includes('droga') || q.includes('opio') || q.includes('vender') || q.includes('hierba')) {
+        renderSadieAnswer('drogas');
+      } else if (q.includes('trabajo') || q.includes('mina') || q.includes('banco') || q.includes('conflicto') || q.includes('herreria')) {
+        renderSadieAnswer('conflicto');
+      } else if (q.includes('rk') || q.includes('revenge') || q.includes('24') || q.includes('morir') || q.includes('pk') || q.includes('convalecencia')) {
+        renderSadieAnswer('heridas');
+      } else if (q.includes('indio') || q.includes('nativo') || q.includes('ambarino') || q.includes('wapiti') || q.includes('tribu')) {
+        renderSadieAnswer('ambarino');
+      } else {
+        document.getElementById('sadieQuote').innerText = 
+          `"Escucha bien sobre '${input.value}': en Westlands cualquier golpe armado exige /testigo previo, máximo 1 rifle y 1 escopeta por bando, y nunca robar 30 min antes ni después de reinicios (07:00 y 19:00). Si tienes dudas de cárcel o tiro, pide /polidispo o revisa el compendio general en 'Biblioteca Normativas V3'."`;
+        document.getElementById('sadieExplanation').innerText = 
+          "Puedes consultar todas las normativas desglosadas por rol (Forajidos, Sheriff, Médicos, Empresas, Indios y Comandos) pulsando el botón 'Biblioteca Normativas V3' en la barra superior.";
+        document.getElementById('sadieSource').innerText = "📖 Consulta General Westlands Origins V3";
+        document.getElementById('sadieTag').innerText = "CONSEJO FORAJIDO";
+      }
+    }
+
+    // BASE DE DATOS Y RENDERIZADOR DE LA BIBLIOTECA COMPLETA DE REGLAMENTOS
+    const RULES_DATABASE = {
+      general: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">1. Principios de Convivencia y Roles</h4>
+            <p class="text-[#d1c4b2]"><strong>IC / OOC:</strong> Total diferenciación entre tu personaje y la persona detrás de la pantalla. Hablar de temas fuera de rol dentro del juego conlleva sanción inmediata. Cero toxicidad en reportes.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Metagaming (MG):</strong> Prohibido usar información externa (streams, discord, chats). Ver directos de otros jugadores o policías mientras estás conectado es motivo de baneo directo.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Powergaming (PG):</strong> Prohibido realizar actos irreales o imposibles (saltar de riscos y levantarse como si nada, llevar 2 armas largas en la espalda, o curarse con vendas en medio de tiros).</p>
+          </div>
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">2. Combate y Roles Agresivos</h4>
+            <ul class="list-disc pl-4 space-y-1 text-[#d1c4b2]">
+              <li><strong>Prohibida la Tecla Q:</strong> Terminantemente prohibido el uso de la tecla Q durante tiroteos (cubrirse o asomar disparando).</li>
+              <li><strong>Prohibidas vendas/tónicos en PVP:</strong> No se pueden utilizar consumibles curativos en mitad de un tiroteo activo.</li>
+              <li><strong>Mochilas prohibidas en PVP:</strong> No se permite entrar a combate con mochilas equipadas.</li>
+              <li><strong>Obligación de grabar:</strong> Todo rol agresivo debe ser grabado obligatoriamente con audio de entrada (tu voz) y salida.</li>
+              <li><strong>Escalada de conflicto:</strong> Si te empujan o insultan no puedes responder a tiros. La fuerza debe ser proporcional.</li>
+            </ul>
+          </div>
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">3. Convalecencia, PK, RK y CK</h4>
+            <p class="text-[#d1c4b2]"><strong>PK (Player Kill):</strong> Al caer abatido quedas inconsciente. Solo puedes responder a los /do de quien te auxilie. Olvidas el motivo de tu muerte si fue un tiroteo.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Revenge Kill (RK):</strong> Prohibido buscar venganza contra tu agresor antes de que pasen 24 horas reales completas. Tampoco puedes participar en otros tiroteos durante ese periodo.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Character Kill (CK):</strong> La muerte definitiva del personaje. Conlleva pérdida total de bienes y no se pueden pasar herencias a otros personajes ni amigos.</p>
+          </div>
+        </div>
+      `,
+      forajidos: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">1. Estructura de Bandas (PDB y Niveles)</h4>
+            <p class="text-[#d1c4b2]"><strong>PDB (Proyecto de Banda):</strong> Inicia con máximo 6 miembros oficiales. No cuentan con reservas hasta ser aprobados como Nivel 1.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Niveles de Banda:</strong> Nivel 1 (6 oficiales + 4 reservas) | Nivel 2 (8 oficiales + 4 reservas) | Nivel 3 (10 oficiales + 6 reservas). Los reservas solo entran si un oficial no está conectado.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Roles Agresivos:</strong> Solo los integrantes oficiales de la banda pueden participar en robos, intimidaciones, cobros y tiroteos.</p>
+          </div>
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">2. Normativa General de Robos</h4>
+            <ul class="list-disc pl-4 space-y-1 text-[#d1c4b2]">
+              <li><strong>Reinicios del Servidor:</strong> Prohibido cometer actos delictivos 30 minutos antes y 30 minutos después de las 07:00 y las 19:00 (hora España).</li>
+              <li><strong>Tiempos de Espera:</strong> En robos menores (tiendas/tumbas) se debe esperar 10 minutos a que acuda el Sheriff.</li>
+              <li><strong>Ruptura de Negociación:</strong> Si se rompen las conversaciones, es obligatorio anunciarlo claramente y esperar 10 segundos antes de abrir fuego.</li>
+              <li><strong>Límite de Armas:</strong> Solo 1 escopeta y 1 rifle por bando en todo tiroteo. El resto repetidora o revólver.</li>
+              <li><strong>Emboscadas:</strong> Es obligatorio realizar dos disparos al aire para dar FairPlay al Sheriff y permitirle tomar posición.</li>
+            </ul>
+          </div>
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">3. Robo a Jugadores Civiles</h4>
+            <p class="text-[#d1c4b2]">Prohibido asaltar dentro de ciudades o pueblos (Rol de Entorno). Solo permitido en caminos rurales o callejones desolados. Obligatorio usar menú ALT. Solo se puede robar el 50% de armas y munición (el dinero todo). Prohibido robar comida, bebidas o cuchillos rudimentarios.</p>
+          </div>
+        </div>
+      `,
+      comandos: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-2">Comandos Esenciales del Jugador</h4>
+            <div class="space-y-2">
+              <div class="flex justify-between items-start bg-[#120d09] p-2 rounded border border-[#3b2716]">
+                <div>
+                  <strong class="text-[#f7d879]">/me [acción en 3ª persona]</strong>
+                  <p class="text-[#b5a796] text-[11px]">Acciones físicas y gestos visuales no programados. Ej: <em>/me desenfunda su revólver con lentitud</em></p>
+                </div>
+                <button onclick="copyCommand('/me extrae un mapa arrugado de su chaleco y lo examina con detenimiento')" class="bg-[#1f1610] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2 py-1 rounded text-[10px] font-cinzel">Copiar Ej.</button>
+              </div>
+
+              <div class="flex justify-between items-start bg-[#120d09] p-2 rounded border border-[#3b2716]">
+                <div>
+                  <strong class="text-[#f7d879]">/do [descripción / entorno / pregunta]</strong>
+                  <p class="text-[#b5a796] text-[11px]">Describe percepciones sensoriales, pide permiso o responde estados corporales. Prohibido mentir. Ej: <em>/do ¿podría atarle las manos?</em></p>
+                </div>
+                <button onclick="copyCommand('/do Se apreciaría un fuerte olor a pólvora quemada saliendo del arma')" class="bg-[#1f1610] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2 py-1 rounded text-[10px] font-cinzel">Copiar Ej.</button>
+              </div>
+
+              <div class="flex justify-between items-start bg-[#120d09] p-2 rounded border border-[#3b2716]">
+                <div>
+                  <strong class="text-[#f7d879]">/dol y /mel [entorno de corto alcance]</strong>
+                  <p class="text-[#b5a796] text-[11px]">Idéntico a /do y /me pero con rango reducido. Vital en atenciones médicas para no ensuciar el chat del poblado.</p>
+                </div>
+                <button onclick="copyCommand('/dol Presentaría una herida de bala en el costado izquierdo con sangrado moderado')" class="bg-[#1f1610] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2 py-1 rounded text-[10px] font-cinzel">Copiar Ej.</button>
+              </div>
+
+              <div class="flex justify-between items-start bg-[#120d09] p-2 rounded border border-[#3b2716]">
+                <div>
+                  <strong class="text-[#f7d879]">/testigo [descripción completa de ilícito]</strong>
+                  <p class="text-[#b5a796] text-[11px]">Obligatorio antes de iniciar el acto. Detalla vestimenta, número de atacantes, caballos y ruta de escape.</p>
+                </div>
+                <button onclick="copyCommand('/testigo 3 hombres armados con sombreros oscuros asaltan diligencia y huyen hacia el cañón')" class="bg-[#1f1610] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2 py-1 rounded text-[10px] font-cinzel">Copiar Ej.</button>
+              </div>
+
+              <div class="flex justify-between items-start bg-[#120d09] p-2 rounded border border-[#3b2716]">
+                <div>
+                  <strong class="text-[#f7d879]">/polidispo</strong>
+                  <p class="text-[#b5a796] text-[11px]">Petición al sistema policial para verificar agentes antes de asaltar Boticaria, Sucursal, Armería, etc.</p>
+                </div>
+                <button onclick="copyCommand('/polidispo')" class="bg-[#1f1610] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2 py-1 rounded text-[10px] font-cinzel">Copiar</button>
+              </div>
+
+              <div class="flex justify-between items-start bg-[#120d09] p-2 rounded border border-[#3b2716]">
+                <div>
+                  <strong class="text-[#f7d879]">/auxilio [aviso en estado de PK]</strong>
+                  <p class="text-[#b5a796] text-[11px]">Obligatorio al caer abatido o herido de gravedad. Describe lo sucedido desde la perspectiva de un tercero.</p>
+                </div>
+                <button onclick="copyCommand('/auxilio ¡Un jinete cayó del caballo inconsciente cerca de Flatneck Station, necesita ayuda!')" class="bg-[#1f1610] hover:bg-[#2b1f17] text-[#d4a338] border border-[#523c1d] px-2 py-1 rounded text-[10px] font-cinzel">Copiar Ej.</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `,
+      empresas: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">Cámara de Comercio y Negocios</h4>
+            <p class="text-[#d1c4b2]"><strong>Propiedad:</strong> Solo se permite 1 negocio por persona (familias de más de 5 pueden tener hasta dos si no se complementan). Prohibido el doble job salvo médicos o gobernación.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Negocios Vetados a Bandas:</strong> Las bandas criminales NO pueden poseer ni trabajar en armerías, herrerías, establos, minas, orfebrerías ni bancos. Solo negocios de rol mediante testaferros limpios.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Extorsiones a Negocios:</strong> Máximo 200$ semanales en dinero o productos. Exige rol previo con el propietario y aprobación de STAFF por ticket. Negarse no es motivo de CK.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Robo a Cultivos:</strong> Horario estricto de 20:00 a 02:00 (hora España peninsular). De 1 a 2 asaltantes con revólver únicamente.</p>
+          </div>
+        </div>
+      `,
+      ley: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">Sheriff (EE.UU.) & Milicia Mexicana</h4>
+            <p class="text-[#d1c4b2]"><strong>Igualdad de Armamento:</strong> Las autoridades deben igualar el armamento portado por los sospechosos en tiroteos regulares (revólver contra revólver, carabina contra carabina). Excepción en redadas aprobadas.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Multas y ByC:</strong> La deuda máxima en multas es de $300. Se dan 48h (penal) o 72h (administrativo) antes de entrar en Búsqueda y Captura con posible embargo o recargo del 25%.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Fuerza Letal:</strong> Exclusiva cuando existe riesgo inminente de muerte para civiles o agentes. Se deben dar hasta tres avisos claros de deponer las armas si no hay rehenes.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Custodia:</strong> Menos de 10 meses se cumplen en comisaría local. Más de 10 meses van a Sisika (EE.UU.) o trabajos forzados (México).</p>
+          </div>
+        </div>
+      `,
+      medicos: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">Sociedad Médica & Rangers</h4>
+            <p class="text-[#d1c4b2]"><strong>Neutralidad Absoluta:</strong> El médico tiene el deber ético de atender por igual a civiles, sheriffs o forajidos buscados sin distinción alguna.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Inmunidad en Servicio:</strong> Queda terminantemente prohibido robar, retener o disparar a un doctor que acude a un aviso o se encuentra tratando a un paciente.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>División Rangers:</strong> Especialistas en medicina de campo, rescate en zonas montañosas y medicina veterinaria de caballos y ganado.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Comandos Médicos:</strong> /tratamiento [ID], /tratamiento_pr [ID], /avmed, /doc y /poldoc.</p>
+          </div>
+        </div>
+      `,
+      nativos: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">Territorio Nativo de Ambarino</h4>
+            <p class="text-[#d1c4b2]"><strong>Fuera de Jurisdicción:</strong> Ambarino es territorio cedido a las tribus. La ley estadounidense no tiene autoridad ni se requiere enviar testigos en sus tierras.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Sin Médicos Obligatorios:</strong> Los doctores no están obligados a entrar a Ambarino a levantar heridos.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Rol de Entorno en Ambarino:</strong> Ambarino NO tiene rol de entorno favorable general para los indios; únicamente el poblado de Wapiti goza de entorno pacífico protegido.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Lanza y Armamento:</strong> Solo se permite 1 lanza por tribu en enfrentamientos. En emboscadas deben dar 2 tiros al aire de FairPlay.</p>
+          </div>
+        </div>
+      `,
+      gobierno: `
+        <div class="space-y-3">
+          <div class="p-3 bg-[#0c0806] border border-[#523c1d] rounded">
+            <h4 class="font-cinzel text-[#d4a338] font-bold text-sm uppercase mb-1">Estructura Política & Alcaldías</h4>
+            <p class="text-[#d1c4b2]"><strong>Incompatibilidad:</strong> Los miembros del Gobierno de Silverpeak y New Austin no pueden poseer ni gestionar negocios privados (los alcaldes sí están autorizados).</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Sedes:</strong> Silverpeak opera desde Blackwater; New Austin opera desde Armadillo bajo la autoridad del Gobernador.</p>
+            <p class="text-[#d1c4b2] mt-1"><strong>Estado de Emergencia:</strong> Medida extraordinaria que no puede superar 1 día inicial sin aprobación federal. Permite controles fronterizos y toques de queda justificados.</p>
+          </div>
+        </div>
+      `
+    };
+
+    function showRuleTab(tabKey) {
+      const allTabs = ['general','forajidos','comandos','empresas','ley','medicos','nativos','gobierno'];
+      allTabs.forEach(t => {
+        const btn = document.getElementById(`rtab-${t}`);
+        if(btn) {
+          if(t === tabKey) {
+            btn.className = "px-3 py-1.5 rounded font-cinzel font-bold bg-[#d4a338] text-[#0a0705] transition shrink-0 shadow";
+          } else {
+            btn.className = "px-3 py-1.5 rounded font-cinzel font-bold bg-[#1a120d] text-[#e6dac6] border border-[#3b2716] hover:text-[#d4a338] transition shrink-0";
+          }
+        }
+      });
+      const area = document.getElementById('ruleContentArea');
+      if (RULES_DATABASE[tabKey]) {
+        area.innerHTML = RULES_DATABASE[tabKey];
+      }
+    }
+
+    // Inicializar compendio en tab general
+    showRuleTab('general');
+
+    // TEMPORIZADOR 24H HERIDAS CON PERSISTENCIA EN NAVEGADOR
+    let timerInt = null;
+    function checkExistingTimer() {
+      const target = localStorage.getItem('injury_cooldown_target');
+      if (target) {
+        const remaining = parseInt(target) - Date.now();
+        if (remaining > 0) {
+          runTimer(remaining);
+        } else {
+          localStorage.removeItem('injury_cooldown_target');
+          document.getElementById('injuryCountdown').innerText = "00:00:00";
+          document.getElementById('timerStatus').innerText = "¡Heridas curadas! Listo para la acción";
+        }
+      }
+    }
+
+    function startInjuryTimer() {
+      const ms24h = 24 * 60 * 60 * 1000;
+      const targetTime = Date.now() + ms24h;
+      localStorage.setItem('injury_cooldown_target', targetTime);
+      runTimer(ms24h);
+    }
+
+    function resetInjuryTimer() {
+      if (timerInt) clearInterval(timerInt);
+      localStorage.removeItem('injury_cooldown_target');
+      document.getElementById('injuryCountdown').innerText = "24:00:00";
+      document.getElementById('timerStatus').innerText = "Temporizador reseteado";
+    }
+
+    function runTimer(totalMs) {
+      if (timerInt) clearInterval(timerInt);
+      document.getElementById('timerStatus').innerText = "⚠️ CONVALECENCIA ACTIVA - PROHIBIDO PVP / RK";
+      
+      const update = () => {
+        const target = parseInt(localStorage.getItem('injury_cooldown_target'));
+        const diff = target - Date.now();
+        if (diff <= 0) {
+          clearInterval(timerInt);
+          localStorage.removeItem('injury_cooldown_target');
+          document.getElementById('injuryCountdown').innerText = "LISTO";
+          document.getElementById('timerStatus').innerText = "Tiempo de recuperación completado";
+          return;
+        }
+        const hrs = Math.floor(diff / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById('injuryCountdown').innerText = 
+          `${String(hrs).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      };
+
+      update();
+      timerInt = setInterval(update, 1000);
+    }
+
+    checkExistingTimer();
+
+    // COPIAR COMANDO RÁPIDO
+    function copyCommand(text) {
+      const input = document.createElement('textarea');
+      input.value = text;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      
+      const originalQuote = document.getElementById('sadieQuote').innerText;
+      document.getElementById('sadieQuote').innerText = `"¡Comando copiado al portapapeles! Pégalo en la consola del juego con cabeza."`;
+      setTimeout(() => {
+        document.getElementById('sadieQuote').innerText = originalQuote;
+      }, 2500);
+    }
+
+    // MODALES Y NAVEGACIÓN
+    function toggleModal(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        if (el.classList.contains('hidden')) {
+          el.classList.remove('hidden');
+          el.classList.add('flex');
+        } else {
+          el.classList.add('hidden');
+          el.classList.remove('flex');
+        }
+      }
+    }
+
+    function switchTab(tab) {
+      if(tab === 'consultor') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // RELOJ DEL SERVIDOR (HORA DE ESPAÑA / MADRID)
+    function updateClock() {
+      try {
+        const options = { timeZone: 'Europe/Madrid', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+        const timeStr = new Intl.DateTimeFormat([], options).format(new Date());
+        document.getElementById('clockDisplay').innerText = timeStr;
+      } catch (e) {
+        const now = new Date();
+        document.getElementById('clockDisplay').innerText = now.toTimeString().split(' ')[0];
+      }
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // GESTIÓN DE CARGA Y PERSISTENCIA DE IMÁGENES
+    function triggerUpload(inputId) {
+      document.getElementById(inputId).click();
+    }
+
+    function handleImageUpload(event, type) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        if (type === 'logo') {
+          localStorage.setItem('desterrados_gang_logo', dataUrl);
+          applyLoadedLogo(dataUrl);
+        } else if (type === 'sadie') {
+          localStorage.setItem('desterrados_sadie_avatar', dataUrl);
+          applyLoadedSadie(dataUrl);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function applyLoadedLogo(src) {
+      const img = document.getElementById('customGangLogoImg');
+      const svg = document.getElementById('fallbackLogoSvg');
+      if (img && svg) {
+        img.src = src;
+        img.classList.remove('hidden');
+        svg.classList.add('hidden');
+      }
+    }
+
+    function applyLoadedSadie(src) {
+      const imgHero = document.getElementById('customSadieImg');
+      const svgHero = document.getElementById('fallbackSadieSvg');
+      const imgMini = document.getElementById('customSadieMiniImg');
+      const miniWrapper = document.getElementById('sadieMiniSvgWrapper');
+
+      if (imgHero && svgHero) {
+        imgHero.src = src;
+        imgHero.classList.remove('hidden');
+        svgHero.classList.add('hidden');
+      }
+      if (imgMini && miniWrapper) {
+        imgMini.src = src;
+        imgMini.classList.remove('hidden');
+        miniWrapper.classList.add('hidden');
+      }
+    }
+
+    // CARGAR IMÁGENES PREVIAMENTE GUARDADAS EN EL NAVEGADOR
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedLogo = localStorage.getItem('desterrados_gang_logo');
+      if (savedLogo) applyLoadedLogo(savedLogo);
+
+      const savedSadie = localStorage.getItem('desterrados_sadie_avatar');
+      if (savedSadie) applyLoadedSadie(savedSadie);
+    });
+  </script>
+</body>
+</html>
